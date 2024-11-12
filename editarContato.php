@@ -39,12 +39,13 @@ if(!empty($_POST['id'])){
     }
 
     if(!empty($email)){
+
         $contato->editar($nome, $telefone, $endereco, $dt_nasc, $descricao, $linkedin, $email, $foto, $_GET['id']);
     }
     header("Location: index.php");
 }
 if(isset($_GET['id']) && !empty($_GET['id'])){
-    $info = $contato->getContato($_GET['id'];)
+    $info = $contato->getContato($_GET['id']);
 }else{
     ?>
     <script type="text/javascript">window.location.href="index.php";</script>
@@ -79,7 +80,7 @@ if(isset($_GET['id']) && !empty($_GET['id'])){
         <div class="corpo">
             <?php foreach($info['foto'] as $foto): ?>
                 <div class="foto_item">
-                    <img src="img/contatos/ <?php echo $foto['url']; ?>"/>
+                    <img src="img/contatos/<?php echo $foto['url']; ?>"/>
                     <a href="excluir_foto.phpid=<?php $foto['id']; ?>">Excluir imagem</a>
                 </div>
             <?php endforeach;?>

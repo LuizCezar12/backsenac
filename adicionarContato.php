@@ -85,7 +85,7 @@ session_start();
         </div>
         <div class="mb-3">
             <label for="foto" class="form-label">URL da Foto</label>
-            <input type="text" class="form-control" id="foto" name="foto" placeholder="URL da foto do contato">
+            <input type="form" class="form-control" id="foto" name="foto" placeholder="URL da foto do contato">
         </div>
         <div class="d-grid">
             <input type="submit" class="btn btn-custom" name="btCadastrar" value="ADICIONAR">

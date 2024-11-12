@@ -1,5 +1,5 @@
 <?php
-include 'class/contatos.class.php';
+/*include 'class/contatos.class.php';
 $contato = new Contatos();
 
 if(!empty($_POST['id'])){
@@ -17,4 +17,4 @@ if(!empty($_POST['id'])){
         $contato->editar($nome, $telefone, $endereco, $dt_nasc, $descricao, $linkedin, $email, $foto, $id);
     }
     header("Location: index.php");
-}
+}*/

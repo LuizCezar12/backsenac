@@ -91,11 +91,12 @@ class Contatos{
     }
     public function editar($nome, $telefone, $endereco, $dt_nasc, $descricao, $linkedin, $email, $foto, $id){
         $emailExistente = $this->existeEmail($email);
-        if(count($emailExistente) > 0 && $emailExistente['id'] != $id){
+        if(count($emailExistente) > 0 && $emailExistente['id'] != $id)
+        {
             return FALSE;
         }else{
             try{
-                $sql= $this->con->conectar()->prepare("UPDATE contatos SET nome = :nome, telefone= :telefone, endereco= :endereco, dt_nasc= :dt_nasc, descricao= :descricao, linkedin= :linkedin, email= :email, foto= :foto WHERE id= :id");
+                $sql= $this->con->conectar()->prepare("UPDATE contatos SET nome = :nome, telefone= :telefone, endereco= :endereco, dt_nasc= :dt_nasc, descricao= :descricao, linkedin= :linkedin, email= :email WHERE id= :id");
                 $sql->bindValue(':nome', $nome);
                 $sql->bindValue(':telefone', $telefone);
                 $sql->bindValue(':endereco', $endereco);
@@ -103,19 +104,20 @@ class Contatos{
                 $sql->bindValue(':descricao', $descricao);
                 $sql->bindValue(':linkedin', $linkedin);
                 $sql->bindValue(':email', $email);
-                $sql->bindValue(':foto', $foto);
+                //$sql->bindValue(':foto', $foto);
                 $sql->bindValue(':id', $id);
 
                 $sql->execute();
 
                 //INSERIR IAMGENS
                 if(count($foto) > 0){
-                    for($q=0; $q<cout($foto['tmp_name']); $q++){
+                    for($q=0; $q<count($foto['tmp_name']); $q++){
+                        
                         $tipo = $foto['type'][$q];
                         if(in_array($tipo, array('image/jpeg', 'imagem/png'))){
                             $tmpname = md5(time().rand(0, 9999)).'.jpg';
                             move_uploaded_file($foto['tmp_name'][$q], 'img/contatos/'.$tmpname);
-                            list($width_orig, $height_orig) = getimagesize('img/contatos'.$tmpname);
+                            list($width_orig, $height_orig) = getimagesize('img/contatos/'.$tmpname);
                             $ratio = $width_orig/$height_orig;
                             
                             $width = 500;
@@ -129,7 +131,7 @@ class Contatos{
                                 $height = $width/$ratio;
                             }
 
-                            $img = imagecreatetruecolor($width, $height)
+                            $img = imagecreatetruecolor($width, $height);
                             if($tipo === 'image/jpeg'){
                                 $origi = imagecreatefromjpeg('img/contatos/'. $tmpname);
                             }elseif($tipo == 'image/png'){
@@ -140,7 +142,7 @@ class Contatos{
                             //imagem salva no servidor 
                             imagejpeg($img, 'img/contatos/'. $tmpname, 80);
                             //salvar no banco de dados a url da foto 
-                            $sql = $this->con->conectar()->prepare("INSERT INTO foto_contato SET id_contato = id_contato, url = :url");
+                            $sql = $this->con->conectar()->prepare("INSERT INTO foto_contato SET id_contato = :id_contato, url = :url");
                             $sql->bindValue(":id_contato", $id);
                             $sql->bindValue(":url", $tmpname);
                             $sql->execute();
@@ -162,11 +164,21 @@ class Contatos{
 
     }
     public function getContato($id){
-        $array = arrray();
+        $array = array();
         $sql = $this->con->conectar()->prepare("SELECT * FROM contatos WHERE id=:id");
         $sql->bindValue(":id", $id);
         $sql->execute();
-        if($sql->rowCount() > 0)
-
+        if($sql->rowCount() > 0){
+            $array = $sql->fetch();
+            //mostrar todas as imagens cadastradas
+            $array['foto'] = array();
+            $sql = $this->con->conectar()->prepare("SELECT id, url FROM foto_contato WHERE id_contato = :id_contato");
+            $sql->bindValue("id_contato", $id);
+            $sql->execute();
+            if($sql->rowCount() > 0){
+                $array['foto'] = $sql->fetchAll();
+            }
+        }
+        return $array;
     }
 }
