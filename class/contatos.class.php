@@ -88,7 +88,19 @@ class Contatos{
         }catch(PDOException $ex){
             echo "ERRO: ".$ex->getMessage();
         }
+
     }
+    public function getFoto(){
+        $array = array();
+        $sql = $this->con->conectar()->prepare("SELECT *, (select foto_contato.url from foto_contato where foto_contato.id_contato.id_contato = contato.id limit 1) as url FROM contatos");
+        $sql->execute();
+        if($sql->rowCount() > 0){
+            $array = $sql->fetchAll();
+            
+        }   
+        return $array; 
+    }
+
     public function editar($nome, $telefone, $endereco, $dt_nasc, $descricao, $linkedin, $email, $foto, $id){
         $emailExistente = $this->existeEmail($email);
         if(count($emailExistente) > 0 && $emailExistente['id'] != $id)
@@ -181,4 +193,5 @@ class Contatos{
         }
         return $array;
     }
+    
 }

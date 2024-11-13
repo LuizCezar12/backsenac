@@ -86,7 +86,7 @@ endforeach;
                 </thead>
                 <tbody>
                     <?php
-                    $lista = $contato->listar();
+                    $lista = $contato->getFoto();
                     foreach($lista as $item):
                     ?>
                     <tr>
