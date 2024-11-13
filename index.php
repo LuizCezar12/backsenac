@@ -99,7 +99,12 @@ endforeach;
                         <td><?php echo $item['linkedin']; ?></td>
                         <td><?php echo $item['email']; ?></td>
                         <td>
-                            <img src="img/<?php echo $item['foto']; ?>" alt="Foto de <?php echo $item['nome']; ?>" width="50" height="50">
+                            <?php if(!empty($item['url'])): ?>
+                                <img src="img/contatos/<?php echo $item['url'];
+                                 ?>" height="70px"  border="1">
+                                 <?php else: ?>
+                                    <img src="img/defaul.png" height="70px" border="1">
+                                 <?php endif; ?>
                         </td>
                         <td>
                         <?php if ($usuarios->temPermissoes('edit')): ?>
